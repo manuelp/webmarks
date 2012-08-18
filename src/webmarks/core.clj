@@ -18,8 +18,15 @@
                    (not (nil? (re-seq pattern str))))]
     (filter #(matches? (key %)) webmarks)))
 
+;; This function is useful for producing suggestions.
+(defn tags-list
+  "Returns a set with all tags ever used."
+  [webmarks]
+  (apply cset/union (map val webmarks)))
+
 ;; Mutable model
 ;; =============
+
 (def webmarks (atom {}))
 
 (defn- split-tags [tags-str]
