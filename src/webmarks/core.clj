@@ -1,6 +1,29 @@
-(ns webmarks.core)
+(ns webmarks.core
+  (:require [clojure.set :as cset]
+            [clojure.string :as str]))
 
-(defn -main
-  "I don't do a whole lot."
-  [& args]
-  (println "Hello, World!"))
+;; Functional model
+;; ================
+
+(defn filter-by-tags
+  "Filter only webmarks associated with *all* given tags."
+  [webmarks & tags]
+  (filter #(cset/subset? (set tags) (val %)) webmarks))
+
+(defn filter-by-url
+  "Filter webmarks by regexp on the url."
+  [webmarks url-re]
+  (let [pattern (re-pattern url-re)
+        matches? (fn [str]
+                   (not (nil? (re-seq pattern str))))]
+    (filter #(matches? (key %)) webmarks)))
+
+;; Mutable model
+;; =============
+(def webmarks (atom {}))
+
+(defn- split-tags [tags-str]
+  (str/split tags-str #","))
+
+(defn add-webmark [url tags]
+  (swap! webmarks assoc url (apply hash-set (split-tags tags))))
