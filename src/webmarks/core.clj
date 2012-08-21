@@ -24,6 +24,12 @@
   [webmarks]
   (apply cset/union (map val webmarks)))
 
+(defn add-new-tag
+  "Returns new webmarks map with the new-tag associated with the given url(s)."
+  [webmarks url-re new-tag]
+  (let [webmark (first (filter-by-url webmarks url-re))]
+    (assoc webmarks (key webmark) (conj (val webmark) new-tag))))
+
 ;; Mutable model
 ;; =============
 
@@ -34,3 +40,6 @@
 
 (defn add-webmark [url tags]
   (swap! webmarks assoc url (apply hash-set (split-tags tags))))
+
+(defn add-tag [url new-tag]
+  (swap! webmarks add-new-tag url new-tag))
