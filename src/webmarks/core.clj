@@ -4,6 +4,8 @@
 
 ;; Functional model
 ;; ================
+;; This is the heart of the application: pure functions to manipulate
+;; data.
 
 (defn filter-by-tags
   "Filter only webmarks associated with *all* given tags."
@@ -25,20 +27,25 @@
   (apply cset/union (map val webmarks)))
 
 (defn add-new-tag
-  "Returns new webmarks map with the new-tag associated with the given url(s)."
-  [webmarks url-re new-tag]
-  (let [webmark (first (filter-by-url webmarks url-re))]
+  "Returns new webmarks map with the new-tag associated with the given url."
+  [webmarks url new-tag]
+  (let [webmark (first (filter-by-url webmarks url))]
     (assoc webmarks (key webmark) (conj (val webmark) new-tag))))
 
 (defn rm-tag
-  "Returns new webmarks map without the tag-to-rm associated with the given url(s)."
-  [webmarks url-re tag-to-rm]
-  (let [webmark (first (filter-by-url webmarks url-re))]
+  "Returns new webmarks map without the tag-to-rm associated with the given url."
+  [webmarks url tag-to-rm]
+  (let [webmark (first (filter-by-url webmarks url))]
     (assoc webmarks (key webmark) (disj (val webmark) tag-to-rm))))
 
 ;; Mutable model
 ;; =============
+;; This model build up the functional one to provide a way to
+;; manipulate a persistent data structure containing the webmarks.
 
+;; The persistent data structure that represents state is hold by an
+;; atom (uncoordinated synchronized concurrency), that will be
+;; manipulated in memory and eventually persisted.
 (def webmarks (atom {}))
 
 (defn- split-tags [tags-str]
