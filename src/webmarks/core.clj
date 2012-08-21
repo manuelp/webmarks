@@ -30,6 +30,12 @@
   (let [webmark (first (filter-by-url webmarks url-re))]
     (assoc webmarks (key webmark) (conj (val webmark) new-tag))))
 
+(defn rm-tag
+  "Returns new webmarks map without the tag-to-rm associated with the given url(s)."
+  [webmarks url-re tag-to-rm]
+  (let [webmark (first (filter-by-url webmarks url-re))]
+    (assoc webmarks (key webmark) (disj (val webmark) tag-to-rm))))
+
 ;; Mutable model
 ;; =============
 
@@ -43,3 +49,6 @@
 
 (defn add-tag [url new-tag]
   (swap! webmarks add-new-tag url new-tag))
+
+(defn remove-tag [url new-tag]
+  (swap! webmarks rm-tag url new-tag))
