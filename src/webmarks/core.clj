@@ -38,6 +38,12 @@
   (let [webmark (first (filter-by-url webmarks url))]
     (assoc webmarks (key webmark) (disj (val webmark) tag-to-rm))))
 
+(defn add-webmark [webmarks url tags]
+  (assoc webmarks url tags))
+
+(defn rm-webmark [webmarks url]
+  (dissoc webmarks url))
+
 ;; Mutable model
 ;; =============
 ;; This model build up the functional one to provide a way to
@@ -51,8 +57,11 @@
 (defn- split-tags [tags-str]
   (str/split tags-str #","))
 
-(defn add-webmark [url tags]
-  (swap! webmarks assoc url (apply hash-set (split-tags tags))))
+(defn add-new-webmark [url tags]
+  (swap! webmarks add-webmark url (apply hash-set (split-tags tags))))
+
+(defn remove-webmark [url]
+  (swap! webmarks rm-webmark url))
 
 (defn add-tag [url new-tag]
   (swap! webmarks add-new-tag url new-tag))
