@@ -1,4 +1,4 @@
-(ns webmarks.mutable-model
+(ns webmarks.mutable
   (:require [webmarks.core :as core]
             [clojure.string :as str]))
 
