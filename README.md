@@ -13,6 +13,17 @@ Why write another system to manage bookmarks? Well, there are several alternativ
 3. They should be *organized only by tags*. Folders are hierarchical, but for the way I use bookmarks, tags seem to be a much better tool.
 4. They should be stored in an accessible and easy to use form, not vendor-specific.
 
+## Documentation
+The main source of documentation right now (since the API is still subject to change) is the source code. You can generate yourself a beautifully formatted and annotated source code copy of this project using [Leiningen](http://leiningen.org/) and [Marginalia](https://github.com/fogus/marginalia) (here is an [example](http://fogus.me/fun/marginalia/) from Marginalia itself).
+
+Clone this repo using git, install Leiningen, then go into the project's directory and run:
+
+```
+lein marg
+```
+
+That's it! The freshly baked documentation is in the *docs* directory.
+
 ## Usage
 
 For now, the main functionality exposed to the CLI is the conversion of Firefox's bookmarks exported in JSON format to [edn](https://github.com/edn-format/edn) format:
