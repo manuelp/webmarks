@@ -1,6 +1,7 @@
 ;; This ns is for importing bookmarks and tags from Firefox.
 (ns webmarks.firefox
   (:require [webmarks.mutable :as model]
+            [webmarks.persistence :as persistence]
             [clojure.string :as s])
   (:use cheshire.core
         clojure.pprint)
@@ -116,7 +117,8 @@ There can be two command line parameters:
 - Output edn filename (default: *webmarks.edn*)"
   [& args]
   (let [json-file (or (first args) "bookmarks.json")
-        out-file (or (second args) "webmarks.end")]
+        out-file (or (second args) "webmarks.edn")
+        container (persistence/->ClojureFile out-file)]
     (import-json json-file)
-    (spit out-file (with-out-str (pprint @model/webmarks)))
+    (.save-data container @model/webmarks)
     (println (format "# webmarks importati: %d" (count @model/webmarks)))))
