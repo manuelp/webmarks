@@ -71,7 +71,9 @@
         tags (nth (find-tags json) 3)]
     (gather-webmarks tags nil)))
 
-(defn -main []
-  (import-json "bookmarks.json")
-  (spit "output.json" (with-out-str (pprint @model/webmarks)))
-  (println (format "# webmarks importati: %d" (count @model/webmarks))))
+(defn -main [& args]
+  (let [json-file (or (first args) "bookmarks.json")
+        out-file (or (second args) "output.json")]
+    (import-json json-file)
+    (spit out-file (with-out-str (pprint @model/webmarks)))
+    (println (format "# webmarks importati: %d" (count @model/webmarks)))))
