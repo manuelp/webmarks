@@ -7,27 +7,27 @@
   (:gen-class))
 
 ;; For testing:
-(def tree {"title" ""
-           "type" "text/x-moz-place-container"
-           "children" [{"title" "scm"
-                        "type" "text/x-moz-place-container"
-                        "children" [{"title" "GitHub"
-                                     "type" "text/x-moz-place"
-                                     "uri" "http://www.github.com"}
-                                    {"title" "BitBucket"
-                                     "type" "text/x-moz-place"
-                                     "uri" "http://www.bitcubket.org"}]
-                        }
-                       {"title" "languages"
-                        "type" "text/x-moz-place-container"
-                        "children" [{"title" "Clojure"
-                                     "type" "text/x-moz-place"
-                                     "uri" "http://www.clojure.org"}
-                                    {"title" "Haskell"
-                                     "type" "text/x-moz-place"
-                                     "uri" "http://www.haskell.org"}]
-                        }]
-           })
+(def tree-example {"title" ""
+                   "type" "text/x-moz-place-container"
+                   "children" [{"title" "scm"
+                                "type" "text/x-moz-place-container"
+                                "children" [{"title" "GitHub"
+                                             "type" "text/x-moz-place"
+                                             "uri" "http://www.github.com"}
+                                            {"title" "BitBucket"
+                                             "type" "text/x-moz-place"
+                                             "uri" "http://www.bitcubket.org"}]
+                                }
+                               {"title" "languages"
+                                "type" "text/x-moz-place-container"
+                                "children" [{"title" "Clojure"
+                                             "type" "text/x-moz-place"
+                                             "uri" "http://www.clojure.org"}
+                                            {"title" "Haskell"
+                                             "type" "text/x-moz-place"
+                                             "uri" "http://www.haskell.org"}]
+                                }]
+                   })
 
 (defn- is-container? [node]
   (= (get node "type") "text/x-moz-place-container"))
@@ -68,8 +68,8 @@
 
 (defn import-json [filename]
   (let [json (parse-string (slurp filename))
-        tags (nth (find-tags json) 3)]
-    (gather-webmarks tags nil)))
+        tags (find-tags json)]
+    (doall (map #(gather-webmarks % nil) tags))))
 
 (defn -main [& args]
   (let [json-file (or (first args) "bookmarks.json")
