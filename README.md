@@ -8,9 +8,9 @@ This is a library written in Clojure to manage so-called *webmarks* (for now it'
 
 Why write another system to manage bookmarks? Well, there are several alternatives out there, but my main requirements where:
 
-1. Bookmarks should be *private* (no social features)
-2. They should be stored *locally first*, with options for cloud storage (ease of backup and replication, no vendor lock-in, etc.)
-3. They should be *organized only by tags*. Folders are hierarchical, but for the way I use bookmarks tags, they seem a much better tool to do that.
+1. Bookmarks should be *private* (no social features).
+2. They should be stored *locally first*, with options for cloud storage (ease of backup and replication, no vendor lock-in, etc.).
+3. They should be *organized only by tags*. Folders are hierarchical, but for the way I use bookmarks, tags seem to be a much better tool.
 4. They should be stored in an accessible and easy to use form, not vendor-specific.
 
 ## Usage
