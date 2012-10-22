@@ -1,4 +1,5 @@
 (ns webmarks.mutable
+  (:use clojure.pprint)
   (:require [webmarks.core :as core]
             [webmarks.persistence :as persistence]
             [clojure.string :as s])
@@ -47,13 +48,13 @@
 ;; TODO Prompt mini-library
 (def commands {"tags" ["Tags list"
                        (fn [& words]
-                         (println (tags-list)))]
+                         (pprint (tags-list)))]
                "by-tag" ["Search by tag"
                          (fn [& tags]
-                           (println (filter-by-tags tags)))]
+                           (pprint (filter-by-tags tags)))]
                "by-url" ["Search by URL regexp"
                          (fn [re]
-                           (println (filter-by-url re)))]
+                           (pprint (filter-by-url re)))]
                })
 
 (defn- read-command [prompt]

@@ -6,4 +6,4 @@
   :plugins [[lein-marginalia "0.7.1"]]
   :dependencies [[org.clojure/clojure "1.4.0"]
                  [cheshire "4.0.1"]]
-  :main webmarks.firefox)
+  :main webmarks.mutable)
