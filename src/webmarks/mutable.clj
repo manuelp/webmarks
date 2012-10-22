@@ -1,6 +1,8 @@
 (ns webmarks.mutable
   (:require [webmarks.core :as core]
-            [clojure.string :as str]))
+            [webmarks.persistence :as persistence]
+            [clojure.string :as s])
+  (:gen-class))
 
 ;; Mutable model
 ;; =============
@@ -13,7 +15,7 @@
 (def webmarks (atom {}))
 
 (defn- split-tags [tags-str]
-  (str/split tags-str #","))
+  (s/split tags-str #","))
 
 (defn add-new-webmark
   "Create/update a webmark with the given comma-separated list of
@@ -32,3 +34,60 @@
 
 (defn remove-tag [url new-tag]
   (swap! webmarks core/rm-tag url new-tag))
+
+(defn filter-by-tags [tags]
+  (apply core/filter-by-tags (cons @webmarks tags)))
+
+(defn filter-by-url [url-re]
+  (core/filter-by-url @webmarks url-re))
+
+(defn tags-list []
+  (core/tags-list @webmarks))
+
+;; TODO Prompt mini-library
+(def commands {"tags" ["Tags list"
+                       (fn [& words]
+                         (println (tags-list)))]
+               "by-tag" ["Search by tag"
+                         (fn [& tags]
+                           (println (filter-by-tags tags)))]
+               "by-url" ["Search by URL regexp"
+                         (fn [re]
+                           (println (filter-by-url re)))]
+               })
+
+(defn- read-command [prompt]
+  (do (print prompt)
+      (flush)
+      (s/split (read-line) #"\s")))
+
+;; TODO Help auto-construction and print (help command or unknown)
+;; TODO Collision with existing commands (help)?
+
+(defn- get-cmd-fn [commands cmd-str]
+  (let [cmd-entry (get commands cmd-str)
+        default-fn #(println "Unknown command")]
+    (if (nil? cmd-entry)
+      default-fn
+      (second cmd-entry))))
+
+(defn- run-command [commands command args]
+  (let [cmd-fn (get-cmd-fn commands command)]
+    (apply cmd-fn (vec args))))
+
+(defn- command-loop [prompt quit-cmd commands-map]
+  (loop []
+    (let [cmd (read-command prompt)]
+     (if (= quit-cmd (first cmd))
+       (println "Bye!")
+       (do
+         (run-command commands-map (first cmd) (rest cmd))
+         (recur))))))
+
+;; TODO Tags sorting
+;; TODO Format webmarks entries
+
+(defn -main [edn-filename & args]
+  (let [file (or edn-filename "webmarks.edn")]
+    (reset! webmarks (.load-data (persistence/->ClojureFile file)))
+    (command-loop "[> " "quit" commands)))
