@@ -85,10 +85,17 @@
          (run-command commands-map (first cmd) (rest cmd))
          (recur))))))
 
+(defn load-webmarks!
+  "Load webmarks into the atom from the given file."
+  [filename]
+  (reset! webmarks (.load-data (persistence/->ClojureFile filename))))
+
 ;; TODO Tags sorting
 ;; TODO Format webmarks entries
 
-(defn -main [edn-filename & args]
+(defn -main
+  "Start a CLI to interact with webmarks loaded from the given file."
+  [edn-filename & args]
   (let [file (or edn-filename "webmarks.edn")]
-    (reset! webmarks (.load-data (persistence/->ClojureFile file)))
+    (load-webmarks! file)
     (command-loop "[> " "quit" commands)))
