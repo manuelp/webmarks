@@ -11,8 +11,7 @@
   (GET "/" [] (view/layout "WebMarks!"))
   (GET "/list" [] (with-out-str
                     (pprint @mutable/webmarks)))
-  (GET "/tags" [] (with-out-str
-                    (pprint (mutable/tags-list))))
+  (GET "/tags" [] (view/tags-page "WebMarks - Tags" (mutable/tags-list)))
   (GET "/search/by-tag/:tag" [tag] (with-out-str
                                      (pprint (mutable/filter-by-tags [tag]))))
   (GET "/search/by-url/:url" [url] (with-out-str

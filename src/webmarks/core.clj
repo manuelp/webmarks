@@ -29,7 +29,7 @@
 (defn tags-list
   "Returns a set with all tags ever used."
   [webmarks]
-  (apply cset/union (map val webmarks)))
+  (filter (complement nil?) (apply cset/union (map val webmarks))))
 
 (defn add-new-tag
   "Returns new webmarks map with the new-tag associated with the given url."

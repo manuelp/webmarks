@@ -3,13 +3,13 @@ body {
 }
 
 .sidebar {
-    width: 30%;
+    width: 20%;
     float: left;
 }
 
 
 .content {
-    width: 70%;
+    width: 80%;
     float: right;
 }
 
