@@ -25,7 +25,7 @@
   [:.content] (h/content (tags-list tags))
   [:.footer] (h/content (footer)))
 
-(h/defsnippet webmark-entry "webmark-entry.html" [:span] [webmark]
+(h/defsnippet webmark-entry "webmarks-list.html" [:span.entry] [webmark]
   [:a.webmark] (h/do->
                 (h/set-attr :href (first webmark))
                 (h/content (first webmark)))
@@ -35,7 +35,7 @@
                               (h/content tag)
                               (h/after ","))))
 
-(h/defsnippet webmarks-list "list.html" [:div] [webmarks]
+(h/defsnippet webmarks-list "webmarks-list.html" [:div] [webmarks]
   [:li] (h/clone-for [webmark webmarks]
                      (h/content (webmark-entry webmark))))
 
