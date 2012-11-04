@@ -1,0 +1,19 @@
+body {
+    font-family: 'Strait', sans-serif;
+}
+
+.sidebar {
+    width: 30%;
+    float: left;
+}
+
+
+.content {
+    width: 70%;
+    float: right;
+}
+
+.footer {
+    clear: both;
+    font-size: small;
+}

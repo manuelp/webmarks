@@ -7,5 +7,7 @@
   :dependencies [[org.clojure/clojure "1.4.0"]
                  [cheshire "4.0.1"]
                  [ring "1.1.6"]
-                 [compojure "1.1.3"]]
-  :main webmarks.mutable)
+                 [compojure "1.1.3"]
+                 [enlive "1.0.1"]
+                 [clj-time "0.4.4"]]
+  :main webmarks.web)
