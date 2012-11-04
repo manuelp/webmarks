@@ -9,8 +9,7 @@
 (defroutes routes*
   (compojure.route/resources "/")
   (GET "/" [] (view/layout "WebMarks!"))
-  (GET "/list" [] (with-out-str
-                    (pprint @mutable/webmarks)))
+  (GET "/list" [] (view/webmarks-page "WebMarks - List" @mutable/webmarks))
   (GET "/tags" [] (view/tags-page "WebMarks - Tags" (mutable/tags-list)))
   (GET "/search/by-tag/:tag" [tag] (with-out-str
                                      (pprint (mutable/filter-by-tags [tag]))))

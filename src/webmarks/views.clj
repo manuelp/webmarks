@@ -24,3 +24,23 @@
   [:.sidebar] (h/content (sidebar))
   [:.content] (h/content (tags-list tags))
   [:.footer] (h/content (footer)))
+
+(h/defsnippet webmark-entry "webmark-entry.html" [:span] [webmark]
+  [:a.webmark] (h/do->
+                (h/set-attr :href (first webmark))
+                (h/content (first webmark)))
+  [:a.tag-link] (h/clone-for [tag (second webmark)]
+                             (h/do->
+                              (h/set-attr :href (str "/search/by-tag/" tag))
+                              (h/content tag)
+                              (h/after ","))))
+
+(h/defsnippet webmarks-list "list.html" [:div] [webmarks]
+  [:li] (h/clone-for [webmark webmarks]
+                     (h/content (webmark-entry webmark))))
+
+(h/deftemplate webmarks-page "layout.html" [title tags]
+  [:#title] (h/content title)
+  [:.sidebar] (h/content (sidebar))
+  [:.content] (h/content (webmarks-list tags))
+  [:.footer] (h/content (footer)))
