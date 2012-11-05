@@ -58,3 +58,14 @@
   [:.sidebar] (h/content (sidebar))
   [:.content] (h/content (new-webmark-form))
   [:.footer] (h/content (footer)))
+
+(h/defsnippet edit-webmark-form "edit-webmark.html" [:div.edit-webmark] [url tags]
+  [:p#webmark-url] (h/content url)
+  [:.tags :span.webmark-tag] (h/clone-for [tag tags]
+                                          (h/content tag)))
+
+(h/deftemplate edit-webmark "layout.html" [title url tags]
+  [:#title] (h/content title)
+  [:.sidebar] (h/content (sidebar))
+  [:.content] (h/content (edit-webmark-form url tags))
+  [:.footer] (h/content (footer)))

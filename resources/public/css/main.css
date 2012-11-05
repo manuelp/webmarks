@@ -28,8 +28,6 @@ a.webmark-edit {
     fint-size: small;
     background-color: #8EFA64;
     padding: 0 2px;
-
-    display: none;
 }
 
 .webmarks-list li:hover {
@@ -38,4 +36,14 @@ a.webmark-edit {
 
 .tags-list a:hover {
     background-color: #DBDBDB;
+}
+
+.edit-webmark p#webmark-url {
+    font-weight: bold;
+    font-size: big;
+}
+
+.edit-webmark span.webmark-tag {
+    margin: 0 1em;
+    font-size: small;
 }
