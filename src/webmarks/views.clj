@@ -1,7 +1,8 @@
 (ns webmarks.views
   (:use [net.cgrand.enlive-html :as h]
         clojure.pprint)
-  (:require [clj-time.core :as dt]))
+  (:require [clj-time.core :as dt]
+            [ring.util.codec :as rc]))
 
 (h/defsnippet footer "footer.html" [:div] []
   [:span.year] (h/content (str (dt/year (dt/now)))))
@@ -30,6 +31,7 @@
   [:a.webmark] (h/do->
                 (h/set-attr :href (first webmark))
                 (h/content (first webmark)))
+  [:a.webmark-edit] (h/set-attr :href (str "/edit/" (rc/url-encode (first webmark))))
   [:a.tag-link] (let [tags (second webmark)
                       num-tags (count tags)
                       tags-pairs (partition 2 (interleave tags (range 1 (inc num-tags))))]

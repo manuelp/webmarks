@@ -23,3 +23,19 @@ a.tag-link {
     background-color: #f8ed8d;
     padding: 0 2px;
 }
+
+a.webmark-edit {
+    fint-size: small;
+    background-color: #8EFA64;
+    padding: 0 2px;
+
+    display: none;
+}
+
+.webmarks-list li:hover {
+    background-color: #DBDBDB;
+}
+
+.tags-list a:hover {
+    background-color: #DBDBDB;
+}
