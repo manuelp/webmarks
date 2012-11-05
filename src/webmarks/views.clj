@@ -1,5 +1,6 @@
 (ns webmarks.views
-  (:use [net.cgrand.enlive-html :as h])
+  (:use [net.cgrand.enlive-html :as h]
+        clojure.pprint)
   (:require [clj-time.core :as dt]))
 
 (h/defsnippet footer "footer.html" [:div] []
@@ -29,11 +30,14 @@
   [:a.webmark] (h/do->
                 (h/set-attr :href (first webmark))
                 (h/content (first webmark)))
-  [:a.tag-link] (h/clone-for [tag (second webmark)]
-                             (h/do->
-                              (h/set-attr :href (str "/search/by-tag/" tag))
-                              (h/content tag)
-                              (h/after ","))))
+  [:a.tag-link] (let [tags (second webmark)
+                      num-tags (count tags)
+                      tags-pairs (partition 2 (interleave tags (range 1 (inc num-tags))))]
+                  (h/clone-for [[tag idx] tags-pairs]
+                               (h/do->
+                                (h/set-attr :href (str "/search/by-tag/" tag))
+                                (h/content tag)
+                                (h/after (if (< idx num-tags) "," ""))))))
 
 (h/defsnippet webmarks-list "webmarks-list.html" [:div] [webmarks]
   [:li] (h/clone-for [webmark webmarks]
