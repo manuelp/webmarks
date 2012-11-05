@@ -17,3 +17,9 @@ body {
     clear: both;
     font-size: small;
 }
+
+a.tag-link {
+    font-size: small;
+    background-color: #f8ed8d;
+    padding: 0 2px;
+}
