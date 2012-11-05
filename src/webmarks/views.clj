@@ -44,3 +44,11 @@
   [:.sidebar] (h/content (sidebar))
   [:.content] (h/content (webmarks-list tags))
   [:.footer] (h/content (footer)))
+
+(h/defsnippet new-webmark-form "new-webmark-form.html" [:form] [])
+
+(h/deftemplate add-webmark "layout.html" [title]
+  [:#title] (h/content title)
+  [:.sidebar] (h/content (sidebar))
+  [:.content] (h/content (new-webmark-form))
+  [:.footer] (h/content (footer)))
