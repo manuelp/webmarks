@@ -11,8 +11,9 @@
   (GET "/" [] (view/layout "WebMarks!"))
   (GET "/list" [] (view/webmarks-page "WebMarks - List" @mutable/webmarks))
   (GET "/tags" [] (view/tags-page "WebMarks - Tags" (mutable/tags-list)))
-  (GET "/search/by-tag/:tag" [tag] (with-out-str
-                                     (pprint (mutable/filter-by-tags [tag]))))
+  (GET "/search/by-tag/:tag" [tag]
+       (view/webmarks-page (str "WebMarks - Tag: " tag)
+                           (mutable/filter-by-tags [tag])))
   (GET "/search/by-url/:url" [url] (with-out-str
                                      (pprint (mutable/filter-by-url url))))
   (compojure.route/not-found "Sorry, there is nothing here."))
