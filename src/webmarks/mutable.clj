@@ -22,7 +22,8 @@
   "Create/update a webmark with the given comma-separated list of
   tags."
   [url tags]
-  (swap! webmarks core/add-webmark url (apply hash-set (split-tags tags))))
+  (do 
+    (swap! webmarks core/add-webmark url (apply hash-set (split-tags tags)))))
 
 (defn remove-webmark [url]
   (swap! webmarks core/rm-webmark url))
@@ -89,6 +90,10 @@
   "Load webmarks into the atom from the given file."
   [filename]
   (reset! webmarks (.load-data (persistence/->ClojureFile filename))))
+
+(defn save-webmarks!
+  [filename]
+  (.save-data (persistence/->ClojureFile filename) @webmarks))
 
 ;; TODO Tags sorting
 ;; TODO Format webmarks entries

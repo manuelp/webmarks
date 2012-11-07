@@ -8,6 +8,8 @@
             [webmarks.mutable :as mutable]
             [webmarks.views :as view]))
 
+(def webmarks-filename (atom ""))
+
 (defroutes routes*
   (compojure.route/resources "/")
   (GET "/" [] (view/layout "WebMarks!"))
@@ -19,6 +21,7 @@
   (GET "/add" [] (view/add-webmark "WebMarks - Add New"))
   (POST "/add" [url tags] (do
                             (mutable/add-new-webmark url tags)
+                            (mutable/save-webmarks! @webmarks-filename)
                             (redirect-after-post "/")))
   (GET "/edit/:encoded-url" [encoded-url]
        (let [url (url-decode encoded-url)]
@@ -40,4 +43,5 @@
         edn-filename (or (second args) "webmarks.edn")]
     (do
       (mutable/load-webmarks! edn-filename)
+      (reset! webmarks-filename edn-filename)
       (run-jetty #'routes {:port port :join? false}))))
