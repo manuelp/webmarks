@@ -14,7 +14,7 @@
   (compojure.route/resources "/")
   (GET "/" [] (view/layout "WebMarks!"))
   (GET "/list" [] (view/webmarks-page "WebMarks - List" @mutable/webmarks))
-  (GET "/tags" [] (view/tags-page "WebMarks - Tags" (mutable/tags-list)))
+  (GET "/tags" [] (view/tags-page "WebMarks - Tags" (sort (mutable/tags-list))))
   (GET "/search/by-tag/:tag" [tag]
        (view/webmarks-page (str "WebMarks - Tag: " tag)
                            (mutable/filter-by-tags [tag])))
