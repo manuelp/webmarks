@@ -1,6 +1,6 @@
 # webmarks
 
-This is a library written in Clojure to manage so-called *webmarks* (for now it's just a fancy name for *bookmarks*). The main characteristic of webmarks is that they are organized only by *tags*: one webmark can have how many tags you want and be searched by tag(s) or by URL substring.
+This is a library (and an app using it) written in Clojure to manage so-called *webmarks* (for now it's just a fancy name for *bookmarks*). The main characteristic of webmarks is that they are organized only by *tags*: one webmark can have how many tags you want and be searched by tag(s) or by URL substring.
 
 *WARNING: this is still alpha software!*
 
@@ -26,13 +26,22 @@ That's it! The freshly baked documentation is in the *docs* directory.
 
 ## Usage
 
-For now, the main functionality exposed to the CLI is the conversion of Firefox's bookmarks exported in JSON format to [edn](https://github.com/edn-format/edn) format:
+The main UI is web-based (written using Ring, Compojure and Enlive if you are curious), you can start the embedded Jetty application server with a simple command:
 
 ```
-java -jar webmarks-<VERSION>.jar <INPUT.json> <OUTPUT.edn>
+java -jar webmarks-<VERSION>.jar [PORT] [WEBMARKS-FILE]
 ```
 
-But functions to manage imported or new webmarks are already present, they'll be exposed in some way (CLI first probably, web interface afterwards).
+Port and webmarks file are optional, defaults:
+
+- Port: *8080*
+- Webmarks file: *webmarks.edn*
+
+It is also possible to convert Firefox's bookmarks exported into JSON format to a webmarks file (it's in plain-text [edn](https://github.com/edn-format/edn) format) suitable to be used by the rest of the application. For now it's necessary to use the project sources and Leiningen:
+
+```
+lein run -m webmarks.firefox <INPUT.json> <OUTPUT.edn>
+```
 
 ## License
 
