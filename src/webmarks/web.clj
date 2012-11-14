@@ -46,7 +46,8 @@
 ;; change our handler rebinding `routes` at will without having to
 ;; restart the server.
 (defn -main [& args]
-  (let [port (or (Integer/parseInt (first args)) 8080)
+  (let [port (or (and (first args) (Integer/parseInt (first args)))
+                 8080)
         edn-filename (or (second args) "webmarks.edn")]
     (do
       (mutable/load-webmarks! edn-filename)
