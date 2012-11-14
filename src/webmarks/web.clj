@@ -25,7 +25,7 @@
                             (redirect-after-post "/")))
   (GET "/edit/:encoded-url"
        [encoded-url]
-       (let [url (url-decode encoded-url)]
+       (let [url (rc/url-decode encoded-url)]
          (view/edit-webmark "WebMarks - Edit" url (get @mutable/webmarks url))))
   (POST "/edit/:encoded-url" [encoded-url new-tag & checked]
         (let [url (rc/url-decode encoded-url)
