@@ -6,7 +6,8 @@
   (:require (compojure route handler)
             [webmarks.mutable :as mutable]
             [webmarks.views :as view]
-            [ring.util.codec :as rc]))
+            [ring.util.codec :as rc])
+  (:gen-class))
 
 (def webmarks-filename (atom ""))
 
