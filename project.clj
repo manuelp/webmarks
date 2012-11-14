@@ -1,4 +1,4 @@
-(defproject webmarks "0.2.0-SNAPSHOT"
+(defproject webmarks "0.2.0"
   :description "Manage bookmarks with tags."
   :url "http://example.com/FIXME"
   :license {:name "Eclipse Public License"
