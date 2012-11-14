@@ -27,10 +27,11 @@
        [encoded-url]
        (let [url (url-decode encoded-url)]
          (view/edit-webmark "WebMarks - Edit" url (get @mutable/webmarks url))))
-  (POST "/edit/:encoded-url" [encoded-url & checked]
+  (POST "/edit/:encoded-url" [encoded-url new-tag & checked]
         (let [url (rc/url-decode encoded-url)
               tags-to-remove (vals checked)]
           (doall (map (partial mutable/remove-tag url) tags-to-remove))
+          (if new-tag (mutable/add-tag url new-tag))
           (redirect-after-post (str "/edit/" (rc/url-encode url)))))
   (compojure.route/not-found "Sorry, there is nothing here."))
 
