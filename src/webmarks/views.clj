@@ -59,10 +59,17 @@
   [:.content] (h/content (new-webmark-form))
   [:.footer] (h/content (footer)))
 
+(h/defsnippet delete-tag-link "edit-webmark.html" [:.webmark-tag] [url tag]
+  [:p] (h/content tag)
+  [:a.delete-tag] (h/set-attr :href ("delete-tag/" tag)))
+
 (h/defsnippet edit-webmark-form "edit-webmark.html" [:div.edit-webmark] [url tags]
   [:p#webmark-url] (h/content url)
-  [:.tags :span.webmark-tag] (h/clone-for [tag tags]
-                                          (h/content tag)))
+  [:form.tags :input.deletable-tag] (h/clone-for [tag tags]
+                                    	(h/do->
+                                         (h/set-attr :name tag)
+                                         (h/set-attr :value tag)
+                                         (h/content tag))))
 
 (h/deftemplate edit-webmark "layout.html" [title url tags]
   [:#title] (h/content title)
