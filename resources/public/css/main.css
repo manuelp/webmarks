@@ -30,6 +30,12 @@ a.webmark-edit {
     padding: 0 2px;
 }
 
+a.webmark-delete {
+    fint-size: small;
+    background-color: #FE3B39;
+    padding: 0 2px;
+}
+
 .webmarks-list li:hover {
     background-color: #DBDBDB;
 }

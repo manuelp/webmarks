@@ -32,6 +32,7 @@
                 (h/set-attr :href (first webmark))
                 (h/content (first webmark)))
   [:a.webmark-edit] (h/set-attr :href (str "/edit/" (rc/url-encode (first webmark))))
+  [:a.webmark-delete] (h/set-attr :href (str "/delete/" (rc/url-encode (first webmark))))
   [:a.tag-link] (let [tags (second webmark)
                       num-tags (count tags)
                       tags-pairs (partition 2 (interleave tags (range 1 (inc num-tags))))]
