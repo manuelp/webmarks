@@ -1,6 +1,6 @@
-(defproject webmarks "0.2.1"
+(defproject webmarks "0.3.0-SNAPSHOT"
   :description "Manage bookmarks with tags."
-  :url "http://example.com/FIXME"
+  :url "http://github.com/manuelp/webmarks"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :plugins [[lein-marginalia "0.7.1"]]
