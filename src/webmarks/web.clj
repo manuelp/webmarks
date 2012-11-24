@@ -1,6 +1,6 @@
 (ns webmarks.web
   (:use [ring.adapter.jetty :only (run-jetty)]
-        [ring.util.response :only (redirect-after-post)]
+        [ring.util.response :only (redirect-after-post redirect)]
         [compojure.core :only (defroutes GET POST)]
         clojure.pprint)
   (:require (compojure route handler)
