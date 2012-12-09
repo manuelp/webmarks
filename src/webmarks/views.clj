@@ -77,3 +77,7 @@
   [:.sidebar] (h/content (sidebar))
   [:.content] (h/content (edit-webmark-form url tags))
   [:.footer] (h/content (footer)))
+
+(h/deftemplate login-page "login-page.html" [title]
+  [:#title] (h/content title)
+  [:.footer] (h/content (footer)))
