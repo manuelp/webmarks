@@ -16,7 +16,8 @@
                     :password (creds/hash-bcrypt "password")
                     :roles #{::admin}}
             "manuel" {:username "manuel"
-                      :password (creds/hash-bcrypt "password")
+                      :password (creds/hash-bcrypt (or (System/getenv "PASSWORD")
+                                                       "password"))
                       :roles #{::user}}})
 
 (derive ::admin ::user)
