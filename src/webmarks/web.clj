@@ -77,6 +77,11 @@
    			{:credential-fn (partial creds/bcrypt-credential-fn users)
                          :workflows [(workflows/interactive-form)]})))
 
+(defn- ensure-edn-file [filename]
+  (let [file (clojure.java.io/file filename)]
+    (if (.createNewFile file)
+      (spit filename "{}"))))
+
 ;; This way, we can start the embedded Jetty server and dynamically
 ;; change our handler rebinding `app` at will without having to
 ;; restart the server.
@@ -90,6 +95,7 @@
                          (System/getenv "WEBMARKS_FILE")
                          "webmarks.edn")]
     (do
+      (ensure-edn-file edn-filename)
       (mutable/load-webmarks! edn-filename)
       (reset! webmarks-filename edn-filename)
       (jetty/run-jetty #'app {:port port :join? false}))))
