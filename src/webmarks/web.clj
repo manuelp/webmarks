@@ -12,52 +12,56 @@
                        [codec :as rc]))
   (:gen-class))
 
-(def users {"admin" {:username "admin"
-                    :password (creds/hash-bcrypt "password")
-                    :roles #{::admin}}
-            "manuel" {:username "manuel"
+(def users {"manuel" {:username "manuel"
                       :password (creds/hash-bcrypt (or (System/getenv "PASSWORD")
                                                        "password"))
                       :roles #{::user}}})
-
-(derive ::admin ::user)
 
 (def webmarks-filename (atom ""))
 
 (defroutes app*
   (route/resources "/")
-  (GET "/" [] (view/layout "WebMarks!"))
-  (GET "/authorized" request
-       (friend/authorize #{::user} "This page can only be seen by authenticated users."))
-  (GET "/admin" request
-       (friend/authorize #{::admin} "This page can only be seen by administrators."))
+  (GET "/" [] (friend/authorize #{::user}
+                                (view/layout "WebMarks!")))
   (GET "/login" [] (view/login-page "WebMarks - Login"))
 
-  (GET "/list" [] (view/webmarks-page "WebMarks - List" @mutable/webmarks))
-  (GET "/tags" [] (view/tags-page "WebMarks - Tags" (sort (mutable/tags-list))))
+  (GET "/list" [] (friend/authorize #{::user}
+                                    (view/webmarks-page "WebMarks - List"
+                                                        @mutable/webmarks)))
+  (GET "/tags" [] (friend/authorize #{::user}
+                                    (view/tags-page "WebMarks - Tags"
+                                                    (sort (mutable/tags-list)))))
   (GET "/search/by-tag/:tag" [tag]
-       (view/webmarks-page (str "WebMarks - Tag: " tag)
-                           (mutable/filter-by-tags [tag])))
-  (GET "/add" [] (view/add-webmark "WebMarks - Add New"))
-  (POST "/add" [url tags] (do
-                            (mutable/add-new-webmark url tags)
-                            (mutable/save-webmarks! @webmarks-filename)
-                            (response/redirect-after-post "/")))
+       (friend/authorize #{::user}
+                         (view/webmarks-page (str "WebMarks - Tag: " tag)
+                                             (mutable/filter-by-tags [tag]))))
+  (GET "/add" [] (friend/authorize #{::user}
+                                   (view/add-webmark "WebMarks - Add New")))
+  (POST "/add" [url tags] (friend/authorize #{::user}
+                                            (do
+                                              (mutable/add-new-webmark url tags)
+                                              (mutable/save-webmarks! @webmarks-filename)
+                                              (response/redirect-after-post "/"))))
   (GET "/edit/:encoded-url"
        [encoded-url]
-       (let [url (rc/url-decode encoded-url)]
-         (view/edit-webmark "WebMarks - Edit" url (get @mutable/webmarks url))))
+       (friend/authorize #{::user}
+                         (let [url (rc/url-decode encoded-url)]
+                           (view/edit-webmark "WebMarks - Edit" url
+                                              (get @mutable/webmarks url)))))
   (POST "/edit/:encoded-url" [encoded-url new-tag & checked]
-        (let [url (rc/url-decode encoded-url)
-              tags-to-remove (vals checked)]
-          (doall (map (partial mutable/remove-tag url) tags-to-remove))
-          (if new-tag (mutable/add-tag url new-tag))
-          (response/redirect-after-post (str "/edit/" (rc/url-encode url)))))
+        (friend/authorize #{::user}
+                          (let [url (rc/url-decode encoded-url)
+                                tags-to-remove (vals checked)]
+                            (doall (map (partial mutable/remove-tag url) tags-to-remove))
+                            (if new-tag (mutable/add-tag url new-tag))
+                            (response/redirect-after-post
+                             (str "/edit/" (rc/url-encode url))))))
   (GET "/delete/:encoded-url"
        [encoded-url]
-       (let [url (rc/url-decode encoded-url)]
-         (mutable/remove-webmark url)
-         (response/redirect "/")))
+       (friend/authorize #{::user}
+                         (let [url (rc/url-decode encoded-url)]
+                           (mutable/remove-webmark url)
+                           (response/redirect "/"))))
   
   (friend/logout (ANY "/logout" request (response/redirect "/")))
   (route/not-found "Not Found"))
