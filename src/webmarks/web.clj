@@ -39,7 +39,8 @@
                                    (view/add-webmark "WebMarks - Add New")))
   (POST "/add" [url tags] (friend/authorize #{::user}
                                             (do
-                                              (mutable/add-new-webmark url tags)
+                                              (mutable/add-new-webmark (rc/url-decode url)
+                                                                       tags)
                                               (mutable/save-webmarks! @webmarks-filename)
                                               (response/redirect-after-post "/"))))
   (GET "/edit/:encoded-url"
