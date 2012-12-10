@@ -37,6 +37,21 @@ Port and webmarks file are optional, defaults:
 - Port: *8080*
 - Webmarks file: *webmarks.edn*
 
+Currently it's required to login with this default credentials:
+
+- Username: manuel
+- Password: password
+
+All settings can be configured also via environment variables:
+
+- `PASSWORD`: password for the "manuel" user.
+- `WEBMARKS_FILE`: filename for the webmarks file that contains (or will contains) all the webmarks.
+- `PORT`: TCP port to bind to.
+
+And there is also a `Procfile`, so that you can easily deploy your own instance of this webapp on Heroku (and configure the instance with your own settings).
+
+### Convert Firefox's bookmarks ###
+
 It is also possible to convert Firefox's bookmarks exported into JSON format to a webmarks file (it's in plain-text [edn](https://github.com/edn-format/edn) format) suitable to be used by the rest of the application. For now it's necessary to use the project sources and Leiningen:
 
 ```
