@@ -78,8 +78,12 @@
 (defn -main [& args]
   (let [port (or (and (first args)
                       (Integer/parseInt (first args)))
+                 (and (System/getenv "PORT")
+                      (Integer/parseInt (System/getenv "PORT")))
                  8080)
-        edn-filename (or (second args) "webmarks.edn")]
+        edn-filename (or (second args)
+                         (System/getenv "WEBMARKS_FILE")
+                         "webmarks.edn")]
     (do
       (mutable/load-webmarks! edn-filename)
       (reset! webmarks-filename edn-filename)
