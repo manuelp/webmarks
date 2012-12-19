@@ -95,9 +95,6 @@
   [filename]
   (.save-data (persistence/->ClojureFile filename) @webmarks))
 
-;; TODO Tags sorting
-;; TODO Format webmarks entries
-
 (defn -main
   "Start a CLI to interact with webmarks loaded from the given file."
   [edn-filename & args]
