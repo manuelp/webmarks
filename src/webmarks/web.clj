@@ -25,8 +25,8 @@
 (defn- init-containers [edn-filename db-spec]
   (do
     (swap! containers conj
-           (persistence/->ClojureFile edn-filename)
-           (persistence/->PostgresDatabase db-spec 100))))
+           (persistence/->PostgresDatabase db-spec 100)
+           (persistence/->ClojureFile edn-filename))))
 
 (defroutes app*
   (route/resources "/")
