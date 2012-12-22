@@ -10,7 +10,9 @@
                       [persistence :as persistence])
             [ring.adapter.jetty :as jetty]
             (ring.util [response :as response]
-                       [codec :as rc]))
+                       [codec :as rc])
+            (clj-time [format :as tformat]
+                      [core :as tcore]))
   (:gen-class))
 
 (def users {"manuel" {:username "manuel"
@@ -72,6 +74,16 @@
                            (mutable/remove-webmark url)
                            (mutable/save-webmarks! @containers)
                            (response/redirect "/"))))
+
+  (GET "/export" []
+       (let [today (tformat/unparse (:date-hour-minute tformat/formatters)
+                                    (tcore/now))
+             filename (str "webmarks-" today ".end")]
+         (->
+          (response/response (pr-str @mutable/webmarks))
+          (response/header "Content-Disposition"
+                           (str "attachment; filename=" filename))
+          (response/content-type "text/plain"))))
   
   (friend/logout (ANY "/logout" request (response/redirect "/")))
   (route/not-found "Not Found"))
