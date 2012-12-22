@@ -6,7 +6,8 @@
             (cemerick.friend [workflows :as workflows]
                              [credentials :as creds])
             (webmarks [views :as view]
-                      [mutable :as mutable])
+                      [mutable :as mutable]
+                      [persistence :as persistence])
             [ring.adapter.jetty :as jetty]
             (ring.util [response :as response]
                        [codec :as rc]))
@@ -17,7 +18,13 @@
                                                        "password"))
                       :roles #{::user}}})
 
-(def webmarks-filename (atom ""))
+(def containers (atom []))
+
+(defn- init-containers [edn-filename db-spec]
+  (do
+    (swap! containers conj
+           (persistence/->ClojureFile edn-filename)
+           (persistence/->PostgresDatabase db-spec))))
 
 (defroutes app*
   (route/resources "/")
@@ -41,7 +48,7 @@
                                             (do
                                               (mutable/add-new-webmark (rc/url-decode url)
                                                                        tags)
-                                              (mutable/save-webmarks! @webmarks-filename)
+                                              (mutable/save-webmarks! @containers)
                                               (response/redirect-after-post "/"))))
   (GET "/edit/:encoded-url"
        [encoded-url]
@@ -55,6 +62,7 @@
                                 tags-to-remove (vals checked)]
                             (doall (map (partial mutable/remove-tag url) tags-to-remove))
                             (if new-tag (mutable/add-tag url new-tag))
+                            (mutable/save-webmarks! @containers)
                             (response/redirect-after-post
                              (str "/edit/" (rc/url-encode url))))))
   (GET "/delete/:encoded-url"
@@ -62,6 +70,7 @@
        (friend/authorize #{::user}
                          (let [url (rc/url-decode encoded-url)]
                            (mutable/remove-webmark url)
+                           (mutable/save-webmarks! @containers)
                            (response/redirect "/"))))
   
   (friend/logout (ANY "/logout" request (response/redirect "/")))
@@ -97,6 +106,6 @@
                          "webmarks.edn")]
     (do
       (ensure-edn-file edn-filename)
-      (mutable/load-webmarks! edn-filename)
-      (reset! webmarks-filename edn-filename)
+      (init-containers edn-filename (System/getenv "DATABASE_URL"))
+      (mutable/load-webmarks! @containers)
       (jetty/run-jetty #'app {:port port :join? false}))))

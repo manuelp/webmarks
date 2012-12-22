@@ -18,7 +18,7 @@
 ;; Storage on PostgreSQL
 ;; =======================
 
-;; TODO Rotate with backup
+;; TODO Rotate
 
 (defn create-storage-table [db-spec]
   (jdbc/with-connection db-spec

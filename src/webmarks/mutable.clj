@@ -88,16 +88,16 @@
 
 (defn load-webmarks!
   "Load webmarks into the atom from the given file."
-  [filename]
-  (reset! webmarks (.load-data (persistence/->ClojureFile filename))))
+  [containers]
+  (reset! webmarks (.load-data (first containers))))
 
 (defn save-webmarks!
-  [filename]
-  (.save-data (persistence/->ClojureFile filename) @webmarks))
+  [containers]
+  (doall (map #(.save-data %1 @webmarks) containers)))
 
 (defn -main
   "Start a CLI to interact with webmarks loaded from the given file."
   [edn-filename & args]
   (let [file (or edn-filename "webmarks.edn")]
-    (load-webmarks! file)
+    (load-webmarks! (persistence/->ClojureFile file))
     (command-loop "[> " "quit" commands)))
