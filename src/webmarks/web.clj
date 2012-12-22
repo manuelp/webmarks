@@ -76,14 +76,16 @@
                            (response/redirect "/"))))
 
   (GET "/export" []
-       (let [today (tformat/unparse (:date-hour-minute tformat/formatters)
-                                    (tcore/now))
-             filename (str "webmarks-" today ".end")]
-         (->
-          (response/response (pr-str @mutable/webmarks))
-          (response/header "Content-Disposition"
-                           (str "attachment; filename=" filename))
-          (response/content-type "text/plain"))))
+       (friend/authorize #{::user}
+                         (let [today (tformat/unparse
+                                      (:date-hour-minute tformat/formatters)
+                                      (tcore/now))
+                               filename (str "webmarks-" today ".end")]
+                           (->
+                            (response/response (pr-str @mutable/webmarks))
+                            (response/header "Content-Disposition"
+                                             (str "attachment; filename=" filename))
+                            (response/content-type "text/plain")))))
   
   (friend/logout (ANY "/logout" request (response/redirect "/")))
   (route/not-found "Not Found"))
