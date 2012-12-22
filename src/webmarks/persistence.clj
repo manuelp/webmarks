@@ -47,17 +47,21 @@
                        (jdbc/delete-rows :storage
                                          ["timestamp = ?" (:timestamp (first timestamps))])))))
 
+(defmacro ensure-table [update-fn create-table-fn]
+  `(try ~update-fn
+        (catch org.postgresql.util.PSQLException e#
+          (do ~create-table-fn
+              ~update-fn))))
+
 (deftype PostgresDatabase [db-spec max-records]
   PersistentContainer
   (save-data [this data]
     (let [record {:timestamp (Timestamp. (.getTime (Date.)))
                   :edn (pr-str data)}]
-      (rotate-records db-spec max-records)
-      (try (insert-record db-spec :storage record)
-           (catch org.postgresql.util.PSQLException e
-             (do
-               (create-storage-table db-spec)
-               (insert-record db-spec :storage record))))))
+      (ensure-table
+       (rotate-records db-spec max-records)
+       (create-storage-table db-spec))
+      (insert-record db-spec :storage record)))
   (load-data [this]
     (first
      (fetch-results db-spec
