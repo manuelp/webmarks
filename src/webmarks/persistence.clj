@@ -39,11 +39,20 @@
   `(jdbc/with-connection ~db-spec
      (jdbc/transaction ~@forms)))
 
-(deftype PostgresDatabase [db-spec]
+(defn- rotate-records [db-spec max]
+  (let [timestamps (fetch-results db-spec
+                                  ["select timestamp from storage order by timestamp asc"])]
+    (if (= max (count timestamps))
+      (run-transaction db-spec
+                       (jdbc/delete-rows :storage
+                                         ["timestamp = ?" (:timestamp (first timestamps))])))))
+
+(deftype PostgresDatabase [db-spec max-records]
   PersistentContainer
   (save-data [this data]
     (let [record {:timestamp (Timestamp. (.getTime (Date.)))
                   :edn (pr-str data)}]
+      (rotate-records db-spec max-records)
       (try (insert-record db-spec :storage record)
            (catch org.postgresql.util.PSQLException e
              (do

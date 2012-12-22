@@ -26,7 +26,7 @@
   (do
     (swap! containers conj
            (persistence/->ClojureFile edn-filename)
-           (persistence/->PostgresDatabase db-spec))))
+           (persistence/->PostgresDatabase db-spec 100))))
 
 (defroutes app*
   (route/resources "/")
