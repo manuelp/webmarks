@@ -63,6 +63,9 @@
        (create-storage-table db-spec))
       (insert-record db-spec :storage record)))
   (load-data [this]
-    (first
-     (fetch-results db-spec
-                    ["SELECT edn FROM storage ORDER BY timestamp DESC LIMIT 1"]))))
+    (ensure-table
+     (read-string (:edn
+                   (first
+                    (fetch-results db-spec
+                                   ["SELECT edn FROM storage ORDER BY timestamp DESC LIMIT 1"]))))
+     (create-storage-table db-spec))))
