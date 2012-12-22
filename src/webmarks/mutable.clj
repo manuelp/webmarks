@@ -87,7 +87,6 @@
          (recur))))))
 
 (defn load-webmarks!
-  "Load webmarks into the atom from the given file."
   [containers]
   (reset! webmarks (.load-data (first containers))))
 

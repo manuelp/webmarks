@@ -12,7 +12,8 @@
             (ring.util [response :as response]
                        [codec :as rc])
             (clj-time [format :as tformat]
-                      [core :as tcore]))
+                      [core :as tcore])
+            [clojure.pprint :as pp])
   (:gen-class))
 
 (def users {"manuel" {:username "manuel"
@@ -82,7 +83,8 @@
                                       (tcore/now))
                                filename (str "webmarks-" today ".edn")]
                            (->
-                            (response/response (pr-str @mutable/webmarks))
+                            (response/response (with-out-str
+                                                 (pp/pprint @mutable/webmarks)))
                             (response/header "Content-Disposition"
                                              (str "attachment; filename=" filename))
                             (response/content-type "text/plain")))))
