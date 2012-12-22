@@ -80,7 +80,7 @@
                          (let [today (tformat/unparse
                                       (:date-hour-minute tformat/formatters)
                                       (tcore/now))
-                               filename (str "webmarks-" today ".end")]
+                               filename (str "webmarks-" today ".edn")]
                            (->
                             (response/response (pr-str @mutable/webmarks))
                             (response/header "Content-Disposition"
